@@ -10,4 +10,4 @@ install:
 		go install .
 
 run:
-		go run cmd/social-receiver/main.go
+		go run main.go
