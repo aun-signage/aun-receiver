@@ -17,6 +17,10 @@
 		{
 			"ImportPath": "github.com/mrjones/oauth",
 			"Rev": "3f16dcc42f866917f38646e7448993412f3a7be7"
+		},
+		{
+			"ImportPath": "github.com/thoj/go-ircevent",
+			"Rev": "baefdc5d0b70369076da6c90e391cdae143570e3"
 		}
 	]
 }

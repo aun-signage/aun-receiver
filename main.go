@@ -5,9 +5,12 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 
 	MQTT "git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.golang.git"
+
+	"github.com/darashi/aun-receiver/irc"
 	"github.com/darashi/aun-receiver/twitter"
 )
 
@@ -52,6 +55,9 @@ func mqttClient(mqttUrl string) (*MQTT.MqttClient, error) {
 	return client, nil
 }
 
+type MqttMessage struct {
+}
+
 func main() {
 	mqttUrl := os.Getenv("MQTT_URL")
 	if mqttUrl == "" {
@@ -88,8 +94,36 @@ func main() {
 		log.Println("Twitter receiver not configured. You need to specify TWITTER_AUTH and TWITTER_QUERY.")
 	}
 
-	for buf := range chTweet {
-		log.Println(buf)
-		client.Publish(MQTT.QOS_ZERO, "tweet", buf)
+	chIrc := make(chan string)
+	ircServer := os.Getenv("IRC_SERVER")
+	ircPort := os.Getenv("IRC_PORT")
+	ircNick := os.Getenv("IRC_NICK")
+	ircChannels := os.Getenv("IRC_CHANNELS")
+	if ircServer != "" && ircPort != "" && ircNick != "" && ircChannels != "" {
+		port, err := strconv.Atoi(ircPort)
+		if err != nil {
+			log.Fatal(err)
+		}
+		channels := strings.Split(ircChannels, ",")
+		irc.Receive(
+			ircServer,
+			port,
+			ircNick,
+			channels,
+			chIrc,
+		)
+	} else {
+		log.Println("IRC receiver not configured. You need to specify IRC_SERVER, IRC_PORT, IRC_NICK and IRC_CHANNELS.")
+	}
+
+	for {
+		select {
+		case buf := <-chTweet:
+			log.Println(buf)
+			client.Publish(MQTT.QOS_ZERO, "tweet", buf)
+		case buf := <-chIrc:
+			log.Println(buf)
+			client.Publish(MQTT.QOS_ZERO, "irc", buf)
+		}
 	}
 }
