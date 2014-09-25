@@ -62,39 +62,34 @@ func main() {
 		log.Fatal(err)
 	}
 
+	chTweet := make(chan string)
 	twitterAuth := os.Getenv("TWITTER_AUTH")
-	if twitterAuth == "" {
-		log.Fatal("You must specify TWITTER_AUTH environment variable")
-	}
-	values := strings.SplitN(twitterAuth, ":", 4)
-	if len(values) != 4 {
-		log.Fatal("You must specify TWITTER_AUTH in [Consumer key]:[Consumer secret]:[Access token]:[Access token secret] format")
-	}
-
 	twitterQuery := os.Getenv("TWITTER_QUERY")
-	if twitterQuery == "" {
-		log.Fatal("You must specify TWITTER_QUERY environment variable")
-	}
-	log.Println("Tracking", twitterQuery)
-
-	ch := make(chan string)
-
-	go func() {
-		for buf := range ch {
-			log.Println(buf)
-			client.Publish(MQTT.QOS_ZERO, "tweet", buf)
+	if twitterAuth != "" && twitterQuery != "" {
+		twitterAuthComponents := strings.SplitN(twitterAuth, ":", 4)
+		if len(twitterAuthComponents) != 4 {
+			log.Fatal("You must specify TWITTER_AUTH in [Consumer key]:[Consumer secret]:[Access token]:[Access token secret] format")
 		}
-	}()
+		log.Println("Tracking", twitterQuery)
+		go func() {
+			err = twitter.Track(
+				twitterAuthComponents[0],
+				twitterAuthComponents[1],
+				twitterAuthComponents[2],
+				twitterAuthComponents[3],
+				twitterQuery,
+				chTweet,
+			)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}()
+	} else {
+		log.Println("Twitter receiver not configured. You need to specify TWITTER_AUTH and TWITTER_QUERY.")
+	}
 
-	err = twitter.Track(
-		values[0],
-		values[1],
-		values[2],
-		values[3],
-		twitterQuery,
-		ch,
-	)
-	if err != nil {
-		log.Fatal(err)
+	for buf := range chTweet {
+		log.Println(buf)
+		client.Publish(MQTT.QOS_ZERO, "tweet", buf)
 	}
 }
