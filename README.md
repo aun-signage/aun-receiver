@@ -21,6 +21,8 @@ It is intended to use in combination with `aun-subscreen`.
 
 See [below](#configuration).
 
+### Activate worker
+
     $ heroku ps:scale worker=1
 
 ## Configuration
