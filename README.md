@@ -96,7 +96,7 @@ IRC_NICK=aun-receiver
 
 Channels to join.
 
-EXAMPLE:
+Example:
 
 ```
 IRC_CHANNELS=#test1,#test2
