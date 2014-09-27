@@ -120,10 +120,10 @@ func main() {
 		select {
 		case buf := <-chTweet:
 			log.Println(buf)
-			client.Publish(MQTT.QOS_ZERO, "tweet", buf)
+			client.Publish(MQTT.QOS_ZERO, "social-stream/tweet", buf)
 		case buf := <-chIrc:
 			log.Println(buf)
-			client.Publish(MQTT.QOS_ZERO, "irc", buf)
+			client.Publish(MQTT.QOS_ZERO, "social-stream/irc", buf)
 		}
 	}
 }
