@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/darashi/aun-receiver",
+	"ImportPath": "github.com/aun-signage/aun-receiver",
 	"GoVersion": "go1.3.1",
 	"Packages": [
 		"."
@@ -7,12 +7,12 @@
 	"Deps": [
 		{
 			"ImportPath": "code.google.com/p/go.net/websocket",
-			"Comment": "null-144",
-			"Rev": "ad01a6fcc8a19d3a4478c836895ffe883bd2ceab"
+			"Comment": "null-150",
+			"Rev": "90e232e2462dedc03bf3c93358da62d54d55dfb6"
 		},
 		{
 			"ImportPath": "git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.golang.git",
-			"Rev": "4572889cc6f741a610af3bb5447c90c03bfb763f"
+			"Rev": "0d6c6e73b249ca8d48fde878b4d1cfbb4cd45a5e"
 		},
 		{
 			"ImportPath": "github.com/mrjones/oauth",

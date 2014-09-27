@@ -10,8 +10,8 @@ import (
 
 	MQTT "git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.golang.git"
 
-	"github.com/darashi/aun-receiver/irc"
-	"github.com/darashi/aun-receiver/twitter"
+	"github.com/aun-signage/aun-receiver/irc"
+	"github.com/aun-signage/aun-receiver/twitter"
 )
 
 func clientId() string {
