@@ -15,11 +15,11 @@ It is intended to use in combination with `aun-subscreen`.
 
 ### Set environment variables
 
-    $ git push heroku master
-
-### Set environment variables
-
 See [below](#configuration).
+
+### Push code to heroku
+
+    $ git push heroku master
 
 ### Activate worker
 
